@@ -1,0 +1,24 @@
+name: Notify programming GH chat
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update status to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TO }}
+          token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
+          message:
+            | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
+            *Проект:*  ${{ github.repository }}
+
+            *Ветка:*  ${{ github.ref_name }}
+
+            *Последний коммит:*  ${{ github.event.head_commit.message }}
+
+            *Автор:*  @${{ github.actor }}
+
+            *Ссылка:*  https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            _____________________________________________________________

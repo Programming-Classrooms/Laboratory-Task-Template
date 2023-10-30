@@ -19,7 +19,7 @@ jobs:
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           REPO_NAME=${REPO_NAME#*/}
-          if [ "${REPO_NAME}" == *"template"* ]; then
+          if [[ "${REPO_NAME}" == *"template"* ]]; then
             echo "Repository is template"
             exit 1
           fi

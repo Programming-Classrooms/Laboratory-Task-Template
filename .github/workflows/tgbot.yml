@@ -16,10 +16,10 @@ jobs:
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
             =====================================
-            @${{ github.actor }} cделал *_Pull Request_*:
+            @${{ github.actor }} cделал *Pull Request*:
             *Проект:*  ${{ github.repository }}
             *Ветка:*  ${{ github.ref_name }}
             *Коммит:*  ${{ github.event.commits[0].message }}
             
-            *Ссылка:*  https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
             _____________________________________ 

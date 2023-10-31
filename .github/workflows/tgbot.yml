@@ -21,4 +21,4 @@ jobs:
             *Последний коммит:*  ${{ github.event.head_commit.message }}
             *Автор:*  @${{ github.actor }}
             *Ссылка:*  https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-            _____________________________________
+            _____________________________________ 

@@ -11,12 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
-          ref: ${{github.event.after}}
+          ref: ${{ env.GITHUB_SHA }
           
       - name: Get Commit Message
         run: |
-          echo "COMMIT_MSG=$(git log --format=%B -n 0 ${{github.event.after}})" >> $GITHUB_ENV
+          echo "COMMIT_MSG=$(git show -s --format=%s)" >> $GITHUB_ENV
           
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master
@@ -25,10 +24,10 @@ jobs:
           token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
-            @${{ github.actor }} cделал *Pull Request* 🚀
+            🚀 @${{ github.actor }} cделал *Pull Request*
             
-            *Проект:*  ${{ github.repository }}
-            *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
-            *Коммент:*  ${{ env.COMMIT_MSG }}
+            💻 *Проект:*  ${{ github.repository }}
+            🛠 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
+            💬 *Коммент:*  ${{ env.COMMIT_MSG }}
             
-            *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            🔗 *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

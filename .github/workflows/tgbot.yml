@@ -15,7 +15,7 @@ jobs:
           
       - name: Get vars
         run: |
-          echo "REPO_NAME"=${ ${{ github.repository }}#*/ }
+          echo "REPO_NAME=${ ${{ github.repository }}#*/ }" >> $GITHUB_ENV
           
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master

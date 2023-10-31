@@ -8,6 +8,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{github.event.after}}
+          
+      - name: Get Commit Message
+        run: |
+          echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{github.event.after}})" >> $GITHUB_ENV
+          
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master
         with:
@@ -15,10 +25,10 @@ jobs:
           token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
-            @${{ github.actor }} cделал **_Pull Request_**:
+            @${{ github.actor }} cделал *Pull Request* :rocket:
             
-            *Проект:*  ##${{ github.repository }}
+            *Проект:*  ${{ github.repository }}
             *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
-            *Коммент:*  ${{ github.event.head_commit.message }}
+            *Коммент:*  ${{ env.COMMIT_MSG }}
             
             *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

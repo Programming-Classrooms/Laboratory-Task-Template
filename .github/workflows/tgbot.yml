@@ -15,10 +15,10 @@ jobs:
           token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
-            @${{ github.actor }} cделал *Pull Request*:
+            @${{ github.actor }} cделал ***Pull Request***:
             
             *Проект:*  ${{ github.repository }}
-            *Ветки:*  ${{ github.base_ref }} <-- ${{ github.head_ref }}
-            *Коммит:*  ${{ github.event.head_commit.message }}
+            *Ветки:*  ***${{ github.base_ref }}*** <-- ***${{ github.head_ref }}***
+            *Коммент:*  ${{ github.event.head_commit.message }}
             
             *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

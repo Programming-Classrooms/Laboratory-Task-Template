@@ -17,7 +17,7 @@ jobs:
       - name: Get vars
         run: |
           echo "REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)" >> $GITHUB_ENV
-          echo "COMMITS=$(git log ${{ github.head_ref }} --not ${{ github.base_ref }} --oneline --pretty=format:"%B" | grep -v '^$' | tac | nl -w 1 -s '. ')" >> $GITHUB_ENV
+          echo "COMMITS=$(git log origin/${{ github.head_ref }} --not origin/${{ github.base_ref }} --oneline --pretty=format:"%B" | grep -v '^$' | tac | nl -w 1 -s '. ')" >> $GITHUB_ENV
           
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master

@@ -18,7 +18,7 @@ jobs:
             @${{ github.actor }} cделал *Pull Request*:
             
             *Проект:*  ${{ github.repository }}
-            *Ветки:*  ${{ github.ref_base }} <-- ${{ github.ref_name }}
+            *Ветки:*  ${{ github.base_ref }} <-- ${{ github.head_ref }}
             *Коммит:*  ${{ github.event.head_commit.message }}
             
             *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

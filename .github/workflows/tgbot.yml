@@ -13,9 +13,9 @@ jobs:
         with:
           ref: ${{ env.GITHUB_SHA }}
           
-      - name: Get Commit Message
+      - name: Get vars
         run: |
-          echo "COMMIT_MSG=$(gh pr view ${{ github.event.pull_request.number }} --json \"headRef,targetRef,headRepositoryUrl\" | jq -r '.headRef.commit.message')" >> $GITHUB_ENV
+          echo "REPO_NAME"=${ ${{ github.repository }}#*/ }
           
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master
@@ -24,12 +24,12 @@ jobs:
           token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
-            🚀 @${{ github.actor }} cделал *Pull Request*!
+            @${{ github.actor }} *cделал Pull Request!* 🚀
             
-            💻 *Проект:*  ${{ github.repository }}
+            💻 *Проект:*  ${{ env.REPO_NAME }}
             
             🛠 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
             
-            💬 *Коммент:*  ${{ env.COMMIT_MSG }}
+            💬 *Коммент:*  
             
             🔗 *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

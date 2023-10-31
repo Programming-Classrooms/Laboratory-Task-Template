@@ -16,7 +16,7 @@ jobs:
           message:
             | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
             =====================================
-            &#42 Проект: &#42  ${{ github.repository }}
+            &#42&#42Проект:&#42&#42  ${{ github.repository }}
             *Ветка:*  ${{ github.ref_name }}
             *Последний коммит:*  ${{ github.event.head_commit.message }}
             *Автор:*  @${{ github.actor }}

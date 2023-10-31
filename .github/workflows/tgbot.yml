@@ -16,6 +16,7 @@ jobs:
       - name: Get vars
         run: |
           echo "REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)" >> $GITHUB_ENV
+          echo "COMMITS=$(git log ${{ github.head_ref }} --not ${{ github.base_ref }} --oneline --pretty=format:"%B" | grep -v '^$' | tac | nl -w 1 -s '. ')" >> $GITHUB_ENV
           
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master
@@ -28,8 +29,8 @@ jobs:
             
             💻 *Проект:*  ${{ env.REPO_NAME }}
             
-            🛠 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
+            🌿 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
             
-            💬 *Коммент:*  
+            📌 *Коммиты:*  ${{ env.COMMITS }}
             
-            🔗 *Ссылка:*  [тык](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            🔗 *Ссылка:*  [тыксюда](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

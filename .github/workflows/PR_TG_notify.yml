@@ -22,7 +22,7 @@ jobs:
       - name: Update status to Telegram
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TO }}
+          to: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TESTING_TO }}
           token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
           format: markdown
           message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context

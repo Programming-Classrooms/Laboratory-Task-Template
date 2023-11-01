@@ -24,7 +24,7 @@ jobs:
             
             🌿 *Ветки:*  `${{ github.event.pull_request.base.ref }}` <-- `${{ github.event.pull_request.head.ref }}`
             
-            ✅ *Ревьюер:*  ${{ github.event.review.user.login }}
+            ✅ *Ревьюер:*  @${{ github.event.review.user.login }}
 
             💬 *Коммент:* ${{ github.event.review.body }}
             

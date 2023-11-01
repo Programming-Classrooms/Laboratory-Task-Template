@@ -1,10 +1,30 @@
 on:
-  pull_request_review:
-    types: [submitted]
+  push:
+    branches:
+      - main
 
 jobs:
   approved:
     if: github.event.review.state == 'APPROVED'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "This PR was approved"
+      - name: Get vars
+        run: |
+          echo "REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)" >> $GITHUB_ENV
+        
+      - name: Update status to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TESTING_TO }}
+          token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
+          format: markdown
+          message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
+            @${{ github.event.pull_request.user.login }}, *твой Pull Request одобрен! Можешь слить ветки!* 🎉
+            
+            💻 *Проект:*  ${{ env.REPO_NAME }}
+            
+            🌿 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
+            
+            ✅ *Ревьюер:*  ${{ env.COMMITS }}
+            
+            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }})

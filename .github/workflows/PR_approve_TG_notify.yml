@@ -22,8 +22,10 @@ jobs:
             
             💻 *Проект:*  ${{ env.REPO_NAME }}
             
-            🌿 *Ветки:*  `${{ github.base_ref }}` <-- `${{ github.head_ref }}`
+            🌿 *Ветки:*  `${{ github.event.pull_request.base.ref }}` <-- `${{ github.event.pull_request.head.ref }}`
             
-            ✅ *Ревьюер:*  ${{ env.COMMITS }}
+            ✅ *Ревьюер:*  ${{ github.event.review.user.login }}
+
+            💬 *Коммент:* ${{ github.event.review.body }}
             
-            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }}) 
+            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }})

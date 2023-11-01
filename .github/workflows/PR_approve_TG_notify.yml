@@ -28,4 +28,4 @@ jobs:
 
             💬 *Коммент:* ${{ github.event.review.body }}
             
-            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }})
+            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }}) 

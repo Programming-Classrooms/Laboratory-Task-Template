@@ -34,4 +34,4 @@ jobs:
             
             📌 *Коммиты:*  ${{ env.COMMITS }}
             
-            🔗 *Ссылка:*  [тыксюда](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            🔗 *Ссылка:*  [тыксюда](${{ github.event.pull_request.html_url }}) 

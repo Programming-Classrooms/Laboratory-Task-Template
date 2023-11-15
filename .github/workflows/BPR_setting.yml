@@ -39,7 +39,7 @@ jobs:
           
           
   branch-protection-rule-changing:
-    if: env.COMMIT_IS_INIT == 'False' && env.REPO_IS_TEMPLATE == 'False'
+    if: ${{ env.COMMIT_IS_INIT }} == 'False' && ${{ env.REPO_IS_TEMPLATE }} == 'False'
     
     runs-on: ubuntu-latest
     steps:

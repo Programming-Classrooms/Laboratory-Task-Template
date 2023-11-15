@@ -53,6 +53,9 @@ jobs:
     if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
   
     steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+        
       - name: Adding "Teachers" team to repository
         run: |
           TEAM_SLUG="teachers"

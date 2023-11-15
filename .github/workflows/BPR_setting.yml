@@ -36,10 +36,16 @@ jobs:
           else
             echo "COMMIT_IS_INIT=False" >> $GITHUB_ENV
           fi
+
+        env:
+          REPO_IS_TEMPLATE: ${{ env.REPO_IS_TEMPLATE }}
+          COMMIT_IS_INIT: ${{ env.COMMIT_IS_INIT }}
           
           
   branch-protection-rule-changing:
-    if: ${{ env.COMMIT_IS_INIT }} == 'False' && ${{ env.REPO_IS_TEMPLATE }} == 'False'
+    needs: repo-determinating
+    
+    if: needs.repo-determinating.outputs.COMMIT_IS_INIT == 'False' && needs.repo-determinating.outputs.REPO_IS_TEMPLATE == 'False'
     
     runs-on: ubuntu-latest
     steps:

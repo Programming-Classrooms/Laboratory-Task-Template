@@ -1,4 +1,4 @@
-name: GH API change BPR request
+name: Branch Protection Rule changing via GH API
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 permissions: write-all
 
 jobs:
-  send-request:
+  repo-determinating:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,9 @@ jobs:
           REPO_NAME=${REPO_NAME#*/}
           if [[ "${REPO_NAME}" == *"template"* ]]; then
             echo "Repository is template"
-            exit 1
+            echo "REPO_IS_TEMPLATE=True" >> $GITHUB_ENV
+          else
+            echo "REPO_IS_TEMPLATE=False" >> $GITHUB_ENV
           fi
 
       - name: Checking initialization
@@ -30,9 +32,17 @@ jobs:
           echo "RUN_NUMBER = ${RUN_NUMBER}"
           if [ "${RUN_NUMBER}" != 1 ]; then
             echo "Not initial commit (remove this step to action trigger on all commits)"
-            exit 1
+            echo "COMMIT_IS_INIT=True" >> $GITHUB_ENV
+          else
+            echo "COMMIT_IS_INIT=False" >> $GITHUB_ENV
           fi
           
+          
+  branch-protection-rule-changing:
+    if: env.COMMIT_IS_INIT == 'False' && env.REPO_IS_TEMPLATE == 'False'
+    
+    runs-on: ubuntu-latest
+    steps:
       - name: Adding "Teachers" team to repository
         run: |
           TEAM_SLUG="teachers"

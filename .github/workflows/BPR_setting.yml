@@ -73,13 +73,7 @@ jobs:
                             ]
                         }
                     },
-                    "restrictions": {
-                        "users": [],
-                        "teams": [
-                            "teachers"
-                        ],
-                        "apps": []
-                    },
+                    "restrictions": null,
                     "required_linear_history": false,
                     "allow_force_pushes": true,
                     "required_conversation_resolution": true

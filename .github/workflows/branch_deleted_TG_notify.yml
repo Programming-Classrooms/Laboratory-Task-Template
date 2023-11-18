@@ -1,0 +1,36 @@
+name: Branch Deleted
+on:
+  delete:
+    branches:
+      - '*'
+
+jobs:
+  telegram-notify:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'branch'
+    steps:
+      - name: Get repo name
+        run: echo "REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)" >> $GITHUB_ENV
+        
+      - name: Get branches names
+        id: get-branches-names
+        run: |
+          BASE_BRANCH_NAME=$(basename "$GITHUB_REF")
+          echo "BASE_BRANCH_NAME=$BASE_BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "BASE_BRANCH_LINK=https://github.com/${{ github.repository }}/tree/$BASE_BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "DELETED_BRANCH_NAME=${{ github.event.ref }}" >> $GITHUB_OUTPUT
+
+      - name: Branch deleted TG notify
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TO }}
+          token: ${{ secrets.TELEGRAM_PROGRAMMINGBOT_TOKEN }}
+          format: markdown
+          message: | #https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#github-context
+            @${{ github.actor }} *удалил ветку!* 🗑️
+            
+            💻 *Проект:*  ${{ env.REPO_NAME }}
+
+            🌱 *Удалённая ветка:* ${{ steps.get-branches-names.outputs.DELETED_BRANCH_NAME }}
+
+            🌳 *Базовая ветка:*  [${{ steps.get-branches-names.outputs.BASE_BRANCH_NAME }}](${{ steps.get-branches-names.outputs.BASE_BRANCH_LINK }})

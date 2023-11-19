@@ -1,0 +1,44 @@
+name: Repository initialization
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  repo-determinating:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+
+      - name: Checking template repository
+        id: checking-template-repository
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          REPO_NAME=${REPO_NAME#*/}
+          if [[ "${REPO_NAME}" == *"template"* ]]; then
+            echo "Repository is template"
+            echo "REPO_IS_TEMPLATE=true" >> $GITHUB_OUTPUT
+          else
+            echo "Repository is NOT template"
+            echo "REPO_IS_TEMPLATE=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checking initialization
+        id: checking-initialization
+        run: |
+          RUN_NUMBER=${{ github.run_number }}
+          echo "RUN_NUMBER = ${RUN_NUMBER}"
+          if [ "${RUN_NUMBER}" != 1 ]; then
+            echo "Not initial commit (remove this step to action trigger on all commits)"
+            echo "COMMIT_IS_INIT=false" >> $GITHUB_OUTPUT
+          else
+            echo "This commit is initial"
+            echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Main branch protection rule setting
+        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
+        uses: ./.github/workflows/main-branch-protection-rule-setting.yml

@@ -79,8 +79,9 @@ jobs:
           echo >> README.md
           
           # Получение списка коллабораторов
+          echo $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators")
+          
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
-
           echo "## Коллабораторы репозитория" >> README.md
           for collaborator in $collaborators; do
             echo "- $collaborator" >> README.md

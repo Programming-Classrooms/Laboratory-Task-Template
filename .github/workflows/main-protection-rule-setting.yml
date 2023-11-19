@@ -104,7 +104,7 @@ jobs:
 
       - name: Self-removing
         run: |
-          FILE_PATH=".github/workflows/BPR_setting.yml"
+          FILE_PATH="${{ github.workspace }}/${{ github.workflow }}"
           SHA=$(git rev-parse HEAD:${FILE_PATH})
           
           curl -L \

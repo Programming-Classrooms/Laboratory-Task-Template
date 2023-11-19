@@ -39,6 +39,10 @@ jobs:
             echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: README.md initialization
+        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
+        uses: ./.github/workflows/init-readme.yml
+
       - name: Main branch protection rule setting
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
-        uses: ./.github/workflows/main-branch-protection-rule-setting.yml
+        uses: ./.github/workflows/init-main-branch-protection-rule.yml

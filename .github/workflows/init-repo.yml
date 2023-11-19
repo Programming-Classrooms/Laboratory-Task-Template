@@ -38,26 +38,22 @@ jobs:
             echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Self-removing
+      - name: Self-removing commit
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
         run: |
           FILE_PATH=".github/workflows/init-repo.yml"
-          SHA=$(git rev-parse HEAD:${FILE_PATH})
+          rm $FILE_PATH
           
-          curl -L \
-            -X DELETE \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.REPO_SETTINGS_ADMIN_CLASSIC_PAT }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/contents/${FILE_PATH} \
-            -d "{
-                    \"message\": \"BPR_setting.yml removed\",
-                    \"committer\": {
-                        \"name\": \"Monalisa Octocat\",
-                        \"email\": \"octocat@github.com\"
-                    },
-                    \"sha\": \"${SHA}\"
-                 }" 
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Удалён инициализирующий workflow"
+
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
           
     outputs:
       repo-is-template: ${{ steps.checking-template-repository.outputs.REPO_IS_TEMPLATE }}

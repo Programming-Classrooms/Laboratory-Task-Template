@@ -101,7 +101,7 @@ jobs:
 
   # Main branch protection rule changing job    
   branch-protection-rule-changing:
-    needs: repo-determinating
+    needs: [repo-determinating, init-readme]
     if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
     runs-on: ubuntu-latest
      

@@ -39,6 +39,18 @@ jobs:
             echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
           fi
 
+      - name: Adding "Teachers" team to repository
+        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
+        run: |
+          TEAM_SLUG="teachers"
+          curl -L \
+            -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_SETTINGS_ADMIN_CLASSIC_PAT }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/orgs/${{ github.repository_owner }}/teams/${TEAM_SLUG}/repos/${{ github.repository }} \
+            -d '{"permission":"admin"}'
+
       - name: README.md initialization
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
         uses: ./.github/workflows/init-readme.yml

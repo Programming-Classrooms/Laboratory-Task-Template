@@ -1,9 +1,7 @@
 name: Init README
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   init-readme:

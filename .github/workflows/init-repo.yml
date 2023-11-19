@@ -1,18 +1,17 @@
 name: Repository initialization
-
 on:
   push:
     branches:
       - main
+permissions: write-all
 
 jobs:
   repo-determinating:
     runs-on: ubuntu-latest
-
     steps:
       - name: Repository checkout
         uses: actions/checkout@v2
-
+        
       - name: Checking template repository
         id: checking-template-repository
         run: |
@@ -25,7 +24,7 @@ jobs:
             echo "Repository is NOT template"
             echo "REPO_IS_TEMPLATE=false" >> $GITHUB_OUTPUT
           fi
-
+          
       - name: Checking initialization
         id: checking-initialization
         run: |
@@ -39,8 +38,79 @@ jobs:
             echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Adding "Teachers" team to repository
+      - name: Self-removing
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
+        run: |
+          FILE_PATH=".github/workflows/init-repo.yml"
+          SHA=$(git rev-parse HEAD:${FILE_PATH})
+          
+          curl -L \
+            -X DELETE \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_SETTINGS_ADMIN_CLASSIC_PAT }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/contents/${FILE_PATH} \
+            -d "{
+                    \"message\": \"BPR_setting.yml removed\",
+                    \"committer\": {
+                        \"name\": \"Monalisa Octocat\",
+                        \"email\": \"octocat@github.com\"
+                    },
+                    \"sha\": \"${SHA}\"
+                 }" 
+          
+    outputs:
+      repo-is-template: ${{ steps.checking-template-repository.outputs.REPO_IS_TEMPLATE }}
+      commit-is-init: ${{ steps.checking-initialization.outputs.COMMIT_IS_INIT }}
+
+
+
+  # README.md initialization job
+  init-readme:
+    needs: repo-determinating
+    if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Init README.md with Collaborators
+        run: |
+          echo "# Практические задания по C++" > README.md
+          echo >> README.md
+          
+          # Получение списка коллабораторов
+          collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+
+          echo "## Коллабораторы репозитория" >> README.md
+          for collaborator in $collaborators; do
+            echo "- $collaborator" >> README.md
+          done
+
+          echo "## Как загружать работы на GitHub"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Инициализирован README.md"
+          git push
+
+
+
+  # Main branch protection rule changing job    
+  branch-protection-rule-changing:
+    needs: repo-determinating
+    if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
+    runs-on: ubuntu-latest
+     
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+
+      - name: Adding "Teachers" team to repository
         run: |
           TEAM_SLUG="teachers"
           curl -L \
@@ -50,11 +120,38 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/orgs/${{ github.repository_owner }}/teams/${TEAM_SLUG}/repos/${{ github.repository }} \
             -d '{"permission":"admin"}'
-
-      - name: README.md initialization
-        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
-        uses: ./.github/workflows/init-readme.yml
-
-      - name: Main branch protection rule setting
-        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
-        uses: ./.github/workflows/init-main-branch-protection-rule.yml
+      
+      - name: Changing main branch protection rule
+        run: |
+          curl -X PUT \
+            -H "Authorization: Bearer ${{ secrets.REPO_SETTINGS_ADMIN_CLASSIC_PAT }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/branches/main/protection \
+              -d '{
+                    "required_status_checks": {
+                        "strict": true,
+                        "contexts": []
+                    },
+                    "enforce_admins": false,
+                    "required_pull_request_reviews": {
+                        "dismissal_restrictions": {
+                            "users": [],
+                            "teams": [
+                                "teachers"
+                            ]
+                        },
+                        "dismiss_stale_reviews": false,
+                        "require_code_owner_reviews": false,
+                        "required_approving_review_count": 1,
+                        "bypass_pull_request_allowances": {
+                            "users": [],
+                            "teams": [
+                                "teachers"
+                            ]
+                        }
+                    },
+                    "restrictions": null,
+                    "required_linear_history": false,
+                    "allow_force_pushes": true,
+                    "required_conversation_resolution": true
+                  }' 

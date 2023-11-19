@@ -59,7 +59,7 @@ jobs:
 
       - name: Self-removing
         run: |
-          FILE_PATH=".github/workflows/BPR_setting.yml"
+          FILE_PATH=".github/workflows/init-main-branch-protection-rule.yml"
           SHA=$(git rev-parse HEAD:${FILE_PATH})
           
           curl -L \

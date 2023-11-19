@@ -77,6 +77,8 @@ jobs:
 
       - name: Init README.md with Collaborators
         run: |
+          git pull
+          
           echo "# Практические задания по C++" > README.md
           echo >> README.md
           
@@ -89,8 +91,10 @@ jobs:
           done
 
           echo "## Как загружать работы на GitHub" >> README.md
-          
-          git pull
+
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Инициализирован README.md"
 
       - name: Push changes
         uses: ad-m/github-push-action@master

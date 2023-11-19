@@ -1,57 +1,12 @@
 name: Branch Protection Rule changing via GH API
 
 on:
-  push:
-    branches:
-      - main
-
+  workflow_call:
 permissions: write-all
 
 jobs:
-  repo-determinating:
+   branch-protection-rule-changing:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Repository checkout
-        uses: actions/checkout@v2
-
-      - name: Checking template repository
-        id: checking-template-repository
-        run: |
-          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          REPO_NAME=${REPO_NAME#*/}
-          if [[ "${REPO_NAME}" == *"template"* ]]; then
-            echo "Repository is template"
-            echo "REPO_IS_TEMPLATE=true" >> $GITHUB_OUTPUT
-          else
-            echo "Repository is NOT template"
-            echo "REPO_IS_TEMPLATE=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Checking initialization
-        id: checking-initialization
-        run: |
-          RUN_NUMBER=${{ github.run_number }}
-          echo "RUN_NUMBER = ${RUN_NUMBER}"
-          if [ "${RUN_NUMBER}" != 1 ]; then
-            echo "Not initial commit (remove this step to action trigger on all commits)"
-            echo "COMMIT_IS_INIT=false" >> $GITHUB_OUTPUT
-          else
-            echo "This commit is initial"
-            echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
-          fi
-          
-    outputs:
-      repo-is-template: ${{ steps.checking-template-repository.outputs.REPO_IS_TEMPLATE }}
-      commit-is-init: ${{ steps.checking-initialization.outputs.COMMIT_IS_INIT }}
-
-
-  branch-protection-rule-changing:
-    runs-on: ubuntu-latest
-    needs: repo-determinating
-    
-    if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
-  
     steps:
       - name: Repository checkout
         uses: actions/checkout@v2
@@ -118,6 +73,9 @@ jobs:
                     \"committer\": {
                         \"name\": \"Monalisa Octocat\",
                         \"email\": \"octocat@github.com\"
+                    },
+                    \"sha\": \"${SHA}\"
+                 }" 
                     },
                     \"sha\": \"${SHA}\"
                  }" 

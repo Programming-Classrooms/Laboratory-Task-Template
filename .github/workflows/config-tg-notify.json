@@ -1,0 +1,11 @@
+{
+  "pr-opened": true,
+  "pr-synchronize": true,
+  "pr-closed-merged-true": true,
+  "pr-closed-merged-false": true,
+  "pr-reopened": true,
+  "pr-review-changes-requested": true,
+  "pr-review-commented": true,
+  "pr-review-approved": true,
+  "branch-deleted": true
+}

@@ -82,18 +82,17 @@ jobs:
           echo $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators")
           
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+          for collaborator in ${collaborators[@]}; do
+            echo $collaborator > collaborators.txt
+          done
+          collaborators_num=${#collaborators[@]}
           
-          # Преобразование массива в строку с переносами строк
-          replacement=$(printf "%s\n" "${collaborators[@]}")
-          
-          # Экранирование символов для безопасной вставки в sed
-          escaped_replacement=$(sed 's/[&/\]/\\&/g' <<<"$replacement")
-          
-          # Замена строки "<a id=repo_collaborators></a>" на строки из массива в файле
-          string_to_replace="<a id=repo_collaborators></a>"
-          echo $string_to_replace
-          sed -i "s/$string_to_replace/$escaped_replacement/g" README.md
+          collabs_start_ind = $(grep -n "<a id=/"repo_collaborators/">" README.md)
+          echo -e "collabs_start_ind = $collabs_start_ind"
 
+          sed -i '$collabs_start_ind r collaborators.txt' README.md
+          
+          rm collaborators.txt
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Инициализирован README.md"

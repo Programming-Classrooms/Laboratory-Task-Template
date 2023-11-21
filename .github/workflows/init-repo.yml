@@ -75,24 +75,27 @@ jobs:
         run: |
           git pull
           
-          echo "# Практические задания по C++" > README.md
-          echo >> README.md
+          # echo "# Практические задания по C++" > README.md
+          # echo >> README.md
           
-          # Получение списка коллабораторов
-          echo $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators")
+          # # Получение списка коллабораторов
+          # echo $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators")
           
-          collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
-          for collaborator in ${collaborators[@]}; do
-            echo $collaborator > collaborators.txt
-          done
-          collaborators_num=${#collaborators[@]}
+          # collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+          # for collaborator in ${collaborators[@]}; do
+          #   echo $collaborator > collaborators.txt
+          # done
+          # collaborators_num=${#collaborators[@]}
           
-          collabs_start_ind = $(grep -n "<a id=/"repo_collaborators/">" README.md | cut -d ":" -f 1)
-          echo -e "collabs_start_ind = $collabs_start_ind"
+          # collabs_start_ind = $(grep -n "<a id=/"repo_collaborators/">" README.md | cut -d ":" -f 1)
+          # echo -e "collabs_start_ind = $collabs_start_ind"
 
-          sed -i '$($collabs_start_ind + 1) r collaborators.txt' README.md
+          # sed -i '$($collabs_start_ind + 1) r collaborators.txt' README.md
           
-          rm collaborators.txt
+          # rm collaborators.txt
+          
+          sed -i '1 r .github/workflows/INIT-README.md' README.md
+          
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Инициализирован README.md"

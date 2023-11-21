@@ -82,12 +82,15 @@ jobs:
           echo $(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators")
           
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
-          echo "## Коллабораторы репозитория" >> README.md
-          for collaborator in $collaborators; do
-            echo "- $collaborator" >> README.md
-          done
-
-          echo "## Как загружать работы на GitHub" >> README.md
+          
+          # Преобразование массива в строку с переносами строк
+          replacement=$(printf "%s\n" "${collaborators[@]}")
+          
+          # Экранирование символов для безопасной вставки в sed
+          escaped_replacement=$(sed 's/[&/\]/\\&/g' <<<"$replacement")
+          
+          # Замена строки "REPO_COLLABORATORS" на строки из массива в файле
+          sed -i "s/REPO_COLLABORATORS/$escaped_replacement/g" README.md
 
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"

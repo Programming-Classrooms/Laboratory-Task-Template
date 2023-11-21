@@ -3,11 +3,11 @@
 
 ### Коллабораторы репозитория
 
-REPO_COLLABORATORS
+<a id=repo_collaborators></a>
 
 ### Текущая конфигурация репозитория
 
-REPO_CONFIG
+<a id=repo_config></a>
 
 ----
 

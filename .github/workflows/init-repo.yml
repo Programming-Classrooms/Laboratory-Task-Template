@@ -75,23 +75,23 @@ jobs:
         run: |
           git pull
           
-          # echo "# Практические задания по C++" > README.md
-          # echo >> README.md
-          
-          # collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
-          # for collaborator in ${collaborators[@]}; do
-          #   echo $collaborator > collaborators.txt
-          # done
-          # collaborators_num=${#collaborators[@]}
-          
-          # collabs_start_ind = $( grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
-          # echo -e "collabs_start_ind = $collabs_start_ind"
+          collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+          for collaborator in ${collaborators[@]}; do
+            echo $collaborator > collaborators.txt
+          done
+          collaborators_num=${#collaborators[@]}
 
-          # sed -i '$(expr $collabs_start_ind + 1) r collaborators.txt' README.md
-          
-          # rm collaborators.txt
-          
           sed -i '1 r .github/workflows/INIT-README.md' README.md
+          
+          collabs_start_ind = $(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
+          echo -e "$((collabs_start_ind + 1)) = $collabs_start_ind"
+          
+          if [ "$ collaborators_num" -eq 0 ]; then
+              echo "Нет коллабораторов" >> collaborators.txt
+          fi
+          sed -i '$(expr $collabs_start_ind + 1) r collaborators.txt' README.md
+          
+          rm collaborators.txt
           
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"

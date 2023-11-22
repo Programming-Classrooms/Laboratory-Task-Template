@@ -41,8 +41,8 @@ jobs:
       - name: Self-removing commit
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
         run: |
-          # FILE_PATH=".github/workflows/init-repo.yml"
-          # rm $FILE_PATH
+          # rm ".github/workflows/init-repo.yml"
+          # rm ".github/workflows/INIT_README.md"
           
           # git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # git config --local user.name "github-actions[bot]"

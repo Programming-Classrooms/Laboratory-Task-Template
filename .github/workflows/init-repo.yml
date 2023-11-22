@@ -41,12 +41,12 @@ jobs:
       - name: Self-removing commit
         if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
         run: |
-          FILE_PATH=".github/workflows/init-repo.yml"
-          rm $FILE_PATH
+          # FILE_PATH=".github/workflows/init-repo.yml"
+          # rm $FILE_PATH
           
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a -m "Удалён инициализирующий workflow"
+          # git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # git config --local user.name "github-actions[bot]"
+          # git commit -a -m "Удалён инициализирующий workflow"
 
 
       - name: Push changes
@@ -83,7 +83,7 @@ jobs:
 
           sed -i '1 r .github/workflows/INIT-README.md' README.md
           
-          collabs_start_ind = $(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
+          collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
           echo -e "$((collabs_start_ind + 1)) = $collabs_start_ind"
           
           if [ "$ collaborators_num" -eq 0 ]; then

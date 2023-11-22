@@ -84,10 +84,10 @@ jobs:
           # done
           # collaborators_num=${#collaborators[@]}
           
-          # collabs_start_ind = $(grep -n "<a id=/"repo_collaborators/">" README.md | cut -d ":" -f 1)
+          # collabs_start_ind = $( grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
           # echo -e "collabs_start_ind = $collabs_start_ind"
 
-          # sed -i '$($collabs_start_ind + 1) r collaborators.txt' README.md
+          # sed -i '$(expr $collabs_start_ind + 1) r collaborators.txt' README.md
           
           # rm collaborators.txt
           

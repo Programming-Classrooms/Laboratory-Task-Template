@@ -79,7 +79,7 @@ jobs:
           for collaborator in ${collaborators[@]}; do
             echo $collaborator > collaborators.txt
           done
-          collaborators_num=${#collaborators[@]}
+          collaborators_num=$(wc -l < "collaborators.txt")
 
           sed -i '1 r .github/workflows/INIT-README.md' README.md
           
@@ -89,7 +89,7 @@ jobs:
           if [ "$ collaborators_num" -eq 0 ]; then
               echo "Нет коллабораторов" >> collaborators.txt
           fi
-          sed -i '$(expr $collabs_start_ind + 1) r collaborators.txt' README.md
+          sed -i "$(expr $collabs_start_ind + 1)"r collaborators.txt README.md
           
           rm collaborators.txt
           

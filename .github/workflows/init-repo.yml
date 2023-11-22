@@ -82,10 +82,9 @@ jobs:
           done
           collaborators_num=$(wc -l < "collaborators.txt")
 
-          sed -i '1 r .github/workflows/INIT_README.md' README.md
+          cp .github/workflows/INIT_README.md README.md
           
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
-          echo -e "$((collabs_start_ind + 1)) = $collabs_start_ind"
           
           if [ "$collaborators_num" -eq 0 ]; then
               echo "Нет коллабораторов" >> collaborators.txt

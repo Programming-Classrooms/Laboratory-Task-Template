@@ -90,7 +90,7 @@ jobs:
           if [ "$collaborators_num" -eq 0 ]; then
               echo "Нет коллабораторов" >> collaborators.txt
           fi
-          sed -i "$(expr $collabs_start_ind + 1)"r collaborators.txt README.md
+          sed -i "$(expr $collabs_start_ind + 1)r collaborators.txt" README.md
           
           rm collaborators.txt
           

@@ -37,24 +37,7 @@ jobs:
             echo "This commit is initial"
             echo "COMMIT_IS_INIT=true" >> $GITHUB_OUTPUT
           fi
-
-      - name: Self-removing commit
-        if: steps.checking-template-repository.outputs.REPO_IS_TEMPLATE == 'false' && steps.checking-initialization.outputs.COMMIT_IS_INIT == 'true'
-        run: |
-          rm ".github/workflows/init-repo.yml"
-          rm ".github/workflows/INIT_README.md"
-          
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a -m "Удалён инициализирующий workflow"
-
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          
-          
+        
     outputs:
       repo-is-template: ${{ steps.checking-template-repository.outputs.REPO_IS_TEMPLATE }}
       commit-is-init: ${{ steps.checking-initialization.outputs.COMMIT_IS_INIT }}
@@ -73,8 +56,6 @@ jobs:
 
       - name: Init README.md with Collaborators
         run: |
-          git pull
-
           touch collaborators.txt
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
           for collaborator in ${collaborators[@]}; do
@@ -159,3 +140,28 @@ jobs:
                     "allow_force_pushes": true,
                     "required_conversation_resolution": true
                   }' 
+
+
+  # Removing initialization files job   
+  self-removing:
+    needs: [repo-determinating, init-readme, branch-protection-rule-changing]
+    if: ${{ needs.repo-determinating.outputs.repo-is-template == 'false' && needs.repo-determinating.outputs.commit-is-init == 'true' }}
+    runs-on: ubuntu-latest
+     
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+
+      - name: Self-removing commit
+        run: |
+          rm ".github/workflows/init-repo.yml"
+          rm ".github/workflows/INIT_README.md"
+          
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Удалён инициализирующий workflow"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

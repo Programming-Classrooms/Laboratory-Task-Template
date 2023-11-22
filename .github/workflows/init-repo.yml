@@ -87,7 +87,7 @@ jobs:
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
           echo -e "$((collabs_start_ind + 1)) = $collabs_start_ind"
           
-          if [ "$ collaborators_num" -eq 0 ]; then
+          if [ "$collaborators_num" -eq 0 ]; then
               echo "Нет коллабораторов" >> collaborators.txt
           fi
           sed -i "$(expr $collabs_start_ind + 1)"r collaborators.txt README.md

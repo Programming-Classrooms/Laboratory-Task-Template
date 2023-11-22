@@ -61,7 +61,7 @@ jobs:
           
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
           for collaborator in ${collaborators[@]}; do
-            echo -e "**GitHub:** $collaborator  |  **Telegram:** $(jq -r '.$collaborator' $CONFIG_FILE_PATH)" >> collaborators.txt
+            echo -e "**GitHub:** $collaborator  |  **Telegram:** $(jq -r '.$collaborator' $LOGINS_FILE_PATH)" >> collaborators.txt
           done
           
           collaborators_num=$(wc -l < "collaborators.txt")
@@ -100,6 +100,8 @@ jobs:
 
       - name: Self-removing commit
         run: |
+          git pull
+          
           rm ".github/workflows/init-repo.yml"
           rm ".github/workflows/INIT_README.md"
           

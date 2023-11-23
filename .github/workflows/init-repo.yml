@@ -85,10 +85,10 @@ jobs:
           FALSE_ICON=":white_large_square:"
           config_keys=$(jq -r 'keys[]' < $TG_NOTIFY_CONFIG_FILE_PATH)
           for key in $config_keys; do
-            bool_val=$(jq -r ".$key[0]" < $TG_NOTIFY_CONFIG_FILE_PATH)
-            name_val=$(jq -r ".$key[1]" <$TG_NOTIFY_CONFIG_FILE_PATH)
+            bool_val=$(jq -r ".\"$key\"[0]" < $TG_NOTIFY_CONFIG_FILE_PATH)
+            name_val=$(jq -r ".\"$key\"[1]" < $TG_NOTIFY_CONFIG_FILE_PATH)
             icon=$(if $bool_val; then echo $TRUE_ICON; else echo $FALSE_ICON; fi)
-            echo -e "|  $name_val  |  $icon |"
+            echo -e "|  $name_val  |  $icon  |"
           done
           # Вставка содержимого файла с таблицой настроек Телеграмм-уведомлений в README.md
           config_table_start_ind=$(grep -F -n "<a id=repo_config></a>" README.md | cut -d ":" -f 1)

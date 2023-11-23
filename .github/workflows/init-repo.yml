@@ -69,16 +69,7 @@ jobs:
               GITHUB_LOGIN=$collaborator
               TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
               echo "| $(expr $index + 1) |  **$GITHUB_LOGIN**  |  **$TELEGRAM_LOGIN** |" >> collaborators.txt
-          done
-          
-          # for collaborator in ${collaborators[@]}
-          # do
-          #   let "collaborators_num+1"
-          #   GITHUB_LOGIN=$collaborator
-          #   TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
-          #   echo "| $collaborators_num |  **$GITHUB_LOGIN**  |  **$TELEGRAM_LOGIN** |" >> collaborators.txt
-          # done
-          
+          done          
           echo -e "\n" >> collaborators.txt
           cp ".github/workflows/INIT_README.md" "README.md"
           # Вставка содержимого файла с коллабораторами в README.md

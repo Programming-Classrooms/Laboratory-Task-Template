@@ -58,11 +58,11 @@ jobs:
         id: get-tg-config
         run: |
           CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
-          echo -e "PR_OPENED_CONFIG=$(jq -r '.["pr-opened"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_SYNCHRONIZE_CONFIG=$(jq -r '.["pr-synchronize"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_CLOSED_MERGED_TRUE_CONFIG=$(jq -r '.["pr-closed-merged-true"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_CLOSED_MERGED_FALSE_CONFIG=$(jq -r '.["pr-closed-merged-false"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_REOPENED_CONFIG=$(jq -r '.["pr-reopened"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_OPENED_CONFIG=$(jq -r '.["pr-opened"]["is-active"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_SYNCHRONIZE_CONFIG=$(jq -r '.["pr-synchronize"]["is-active"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_CLOSED_MERGED_TRUE_CONFIG=$(jq -r '.["pr-closed-merged-true"]["is-active"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_CLOSED_MERGED_FALSE_CONFIG=$(jq -r '.["pr-closed-merged-false"]["is-active"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_REOPENED_CONFIG=$(jq -r '.["pr-reopened"]["is-active"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
 
 
       - name: Get GitHub->Teleram logins config

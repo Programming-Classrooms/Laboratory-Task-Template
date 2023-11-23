@@ -62,18 +62,19 @@ jobs:
           echo "|:-------------------------------------------------:|:--------------------:|" >>collaborators.txt
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
           LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
+          collaborators_num=0
           for collaborator in ${collaborators[@]}; do
+            (( collaborators_num++ ))
             GITHUB_LOGIN=$collaborator
             TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
             echo -e "|  **$GITHUB_LOGIN**  |  **$TELEGRAM_LOGIN** |" >> collaborators.txt
           done
-          collaborators_num=$(wc -l < "collaborators.txt")
           echo -e "\n" >> collaborators.txt
           cp ".github/workflows/INIT_README.md" "README.md"
           # Вставка содержимого файла с коллабораторами в README.md
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
           if [ "$collaborators_num" -eq 0 ]; then
-              echo "Коллабораторов нет" > collaborators.txt
+              echo "Коллабораторов на данный момент нет" > collaborators.txt
           fi
           sed -i "$(expr $collabs_start_ind + 0)r collaborators.txt" README.md
           rm collaborators.txt

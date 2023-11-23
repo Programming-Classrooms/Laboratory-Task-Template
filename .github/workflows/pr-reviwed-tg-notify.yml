@@ -58,9 +58,9 @@ jobs:
         id: get-tg-config
         run: |
           CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
-          echo -e "PR_REVIEW_APPROVED_CONFIG=$(jq -r '.["pr-review-approved"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_REVIEW_COMMENTED_CONFIG=$(jq -r '.["pr-review-commented"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
-          echo -e "PR_REVIEW_CHANGES_REQUESTED_CONFIG=$(jq -r '.["pr-review-changes-requested"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_REVIEW_APPROVED_CONFIG=$(jq -r '.["pr-review-approved"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_REVIEW_COMMENTED_CONFIG=$(jq -r '.["pr-review-commented"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "PR_REVIEW_CHANGES_REQUESTED_CONFIG=$(jq -r '.["pr-review-changes-requested"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
 
 
         # Получение Телеграмм логинов из .json файла

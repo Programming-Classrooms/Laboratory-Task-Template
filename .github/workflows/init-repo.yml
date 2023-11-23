@@ -64,7 +64,7 @@ jobs:
           LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
           collaborators_num=0
           for collaborator in ${collaborators[@]}; do
-            (( collaborators_num++ ))
+            let "collaborators_num++"
             GITHUB_LOGIN=$collaborator
             TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
             echo "| $collaborators_num |  **$GITHUB_LOGIN**  |  **$TELEGRAM_LOGIN** |" >> collaborators.txt

@@ -5,7 +5,7 @@
 
 <a id=repo_collaborators></a>
 
-### Текущая конфигурация репозитория
+### Текущая конфигурация Telegram-уведомлений
 
 <a id=repo_config></a>
 

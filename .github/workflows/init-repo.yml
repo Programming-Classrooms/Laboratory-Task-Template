@@ -58,15 +58,17 @@ jobs:
         run: |
           # Создание текстового файла с коллабораторами
           touch collaborators.txt
+          echo "|                   GitHub-логин                    |    Telegram-логин    |" >> collaborators.txt
+          echo "|:-------------------------------------------------:|:--------------------:|" >>collaborators.txt
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
           LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
           for collaborator in ${collaborators[@]}; do
             GITHUB_LOGIN=$collaborator
             TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
-            echo -e "GitHub: **$GITHUB_LOGIN**  |  Telegram: **$TELEGRAM_LOGIN"** >> collaborators.txt
+            echo -e "|  **$GITHUB_LOGIN**  |  **$TELEGRAM_LOGIN** |" >> collaborators.txt
           done
-          echo -e "\n" >> collaborators.txt
           collaborators_num=$(wc -l < "collaborators.txt")
+          echo -e "\n" >> collaborators.txt
           cp ".github/workflows/INIT_README.md" "README.md"
           # Вставка содержимого файла с коллабораторами в README.md
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)

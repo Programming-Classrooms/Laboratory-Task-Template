@@ -82,7 +82,7 @@ jobs:
           echo "|-------------------------------------------------|:--------------------:|" >> config_table.txt
           TG_NOTIFY_CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
           TRUE_ICON=":white_check_mark:"
-          FALSE_ICON=":white_large_square:"
+          FALSE_ICON=":x:"
           config_keys=$(jq -r 'keys[]' < $TG_NOTIFY_CONFIG_FILE_PATH)
           for key in $config_keys; do
             bool_val=$(jq -r ".[\"$key\"][\"is-active\"]" < $TG_NOTIFY_CONFIG_FILE_PATH)

@@ -24,7 +24,7 @@
         "str-name-rus": "Запрос изменений в **PR**"
     },
     "pr-review-commented": {
-        "is-active": true,
+        "is-active": false,
         "str-name-rus": "Комментирование **PR**"
     },
     "pr-review-approved": {
@@ -32,7 +32,7 @@
         "str-name-rus": "Апрув **PR**"
     },
     "branch-deleted": {
-        "is-active": true,
+        "is-active": false,
         "str-name-rus": "Удаление **ветки**"
     }
 }

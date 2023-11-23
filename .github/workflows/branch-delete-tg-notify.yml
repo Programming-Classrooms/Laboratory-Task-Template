@@ -37,7 +37,7 @@ jobs:
         id: get-tg-config
         run: |
           CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
-          echo -e "BRANCH_DELETED_CONFIG=$(jq -r '.["branch-deleted"]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
+          echo -e "BRANCH_DELETED_CONFIG=$(jq -r '.["branch-deleted"][0]' $CONFIG_FILE_PATH)" >> $GITHUB_OUTPUT
 
 
        # Получение Телеграмм логинов из .json файла

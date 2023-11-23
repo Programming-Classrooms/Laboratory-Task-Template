@@ -56,28 +56,44 @@ jobs:
 
       - name: Init README.md
         run: |
+          # Создание текстового файла с коллабораторами
           touch collaborators.txt
-          LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
-          
           collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+          LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
           for collaborator in ${collaborators[@]}; do
             GITHUB_LOGIN=$collaborator
             TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
             echo -e "GitHub: **$GITHUB_LOGIN**  |  Telegram: **$TELEGRAM_LOGIN"** >> collaborators.txt
           done
+          echo -e "\n" >> collaborators.txt
           collaborators_num=$(wc -l < "collaborators.txt")
           cp ".github/workflows/INIT_README.md" "README.md"
+          # Вставка содержимого файла с коллабораторами в README.md
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
-          echo -e "\n" >> collaborators.txt
           if [ "$collaborators_num" -eq 0 ]; then
               echo "Коллабораторов нет" > collaborators.txt
           fi
           sed -i "$(expr $collabs_start_ind + 0)r collaborators.txt" README.md
           rm collaborators.txt
 
+          # Создание текстового файла с таблицой настроек Телеграмм-уведомлений
+          touch config_table.txt
+          echo "|                 Тип уведомления                 |          ?           |" >> config_table.txt
+          echo "|-------------------------------------------------|:--------------------:|" >> config_table.txt
           TG_NOTIFY_CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
+          TRUE_ICON=":white_check_mark:"
+          FALSE_ICON=":white_large_square:"
           config_keys=$(jq -r 'keys[]' < $TG_NOTIFY_CONFIG_FILE_PATH)
-          
+          for key in $config_keys; do
+            bool_val=$(jq -r ".$key[0]" < $TG_NOTIFY_CONFIG_FILE_PATH)
+            name_val=$(jq -r ".$key[1]" <$TG_NOTIFY_CONFIG_FILE_PATH)
+            icon=$(if $bool_val; then echo $TRUE_ICON; else echo $FALSE_ICON; fi)
+            echo -e "|  $name_val  |  $icon |"
+          done
+          # Вставка содержимого файла с таблицой настроек Телеграмм-уведомлений в README.md
+          config_table_start_ind=$(grep -F -n "<a id=repo_config></a>" README.md | cut -d ":" -f 1)
+          sed -i "$(expr $config_table_start_ind + 0)r config_table.txt" README.md
+          rm config_table.txt
           
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"

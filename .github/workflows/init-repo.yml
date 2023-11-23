@@ -54,7 +54,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Init README.md with Collaborators
+      - name: Init README.md
         run: |
           touch collaborators.txt
           LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
@@ -63,22 +63,21 @@ jobs:
           for collaborator in ${collaborators[@]}; do
             GITHUB_LOGIN=$collaborator
             TELEGRAM_LOGIN=$(jq -r ".$collaborator" $LOGINS_FILE_PATH)
-            echo -e "**GitHub:** $GITHUB_LOGIN  |  **Telegram:** $TELEGRAM_LOGIN" >> collaborators.txt
+            echo -e "GitHub: **$GITHUB_LOGIN**  |  Telegram: **$TELEGRAM_LOGIN"** >> collaborators.txt
           done
-          
           collaborators_num=$(wc -l < "collaborators.txt")
-
           cp ".github/workflows/INIT_README.md" "README.md"
-          
           collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
-
           echo -e "\n" >> collaborators.txt
           if [ "$collaborators_num" -eq 0 ]; then
               echo "Коллабораторов нет" > collaborators.txt
           fi
           sed -i "$(expr $collabs_start_ind + 0)r collaborators.txt" README.md
-          
           rm collaborators.txt
+
+          TG_NOTIFY_CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
+          config_keys=$(jq -r 'keys[]' < $TG_NOTIFY_CONFIG_FILE_PATH)
+          
           
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"

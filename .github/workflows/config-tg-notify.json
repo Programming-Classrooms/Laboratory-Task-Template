@@ -1,11 +1,11 @@
 {
-  "pr-opened": true,
-  "pr-synchronize": true,
-  "pr-closed-merged-true": true,
-  "pr-closed-merged-false": true,
-  "pr-reopened": true,
-  "pr-review-changes-requested": true,
-  "pr-review-commented": true,
-  "pr-review-approved": true,
-  "branch-deleted": true
+  "pr-opened": [true, "Открытие **PR**"],
+  "pr-synchronize": [true, "Модификация **PR**"],
+  "pr-closed-merged-true": [true, "Слияние **PR**"],
+  "pr-closed-merged-false": [true, "Закрытие **PR**"],
+  "pr-reopened": [true, "Переоткрытие **PR**"],
+  "pr-review-changes-requested": [true, "Запрос изменений в **PR**"],
+  "pr-review-commented": [true, "Комментирование **PR**"],
+  "pr-review-approved": [true, "Апрув **PR**"],
+  "branch-deleted": [true, "Удаление **ветки**"]
 }

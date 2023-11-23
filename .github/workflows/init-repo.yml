@@ -78,7 +78,7 @@ jobs:
 
           # Создание текстового файла с таблицой настроек Телеграмм-уведомлений
           touch config_table.txt
-          echo "|                 Тип уведомления                 |          ?           |" >> config_table.txt
+          echo "|                 Тип уведомления                 |                      |" >> config_table.txt
           echo "|-------------------------------------------------|:--------------------:|" >> config_table.txt
           TG_NOTIFY_CONFIG_FILE_PATH=".github/workflows/config-tg-notify.json"
           TRUE_ICON=":white_check_mark:"

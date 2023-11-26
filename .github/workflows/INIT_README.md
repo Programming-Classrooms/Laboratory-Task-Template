@@ -99,6 +99,13 @@ Host github.com-PetrIvanov
   IdentityFile ~/.ssh/<название файла с ключом>
 ```
 
+Для самопроверки можно прописать:
+
+```sh
+ssh -T git@github.com-IvanPetrov
+# Hi AlexandrOsiptsov! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
 ## Создание локальной копии репозитория (через SSH)
 
 После настройки **SSH-ключей**, клонировать репозиторий можно через **SSH**
@@ -108,7 +115,7 @@ Host github.com-PetrIvanov
 ```sh
 git clone git@github.com-IvanPetrov:<IvanPetrov>/<repository-name>.git
 ```
-**ВНИМАНИЕ**: Ссылка составлена именно с указанием **Hostname** `git@github.com-IvanPetrov`, это указывает для `git`, какой именно аккаунт по будет использоваться для внесения изменений. Если скопировать ссылку в разделе **SSH** в кнопке **Code** главной страницы репозитория, **Hostname** будет выглядеть так: `git@github.com`, что может привести к ошибкам при данном способе использования
+**ВНИМАНИЕ**: Ссылка составлена именно с указанием **Hostname** `git@github.com-IvanPetrov`, это указывает для `git`, какой именно аккаунт по будет использоваться для внесения изменений. Если скопировать ссылку в разделе **SSH** в кнопке **Code** главной страницы репозитория, **Hostname** будет выглядеть так: `git@github.com`, что может привести к ошибкам при данном способе использовании
 
 
 ## <a id="make-changes"></a>Внесение изменений

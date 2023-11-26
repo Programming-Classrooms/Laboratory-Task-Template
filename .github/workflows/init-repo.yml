@@ -73,7 +73,7 @@ jobs:
           echo -e "\n" >> collaborators.txt
           cp ".github/workflows/INIT_README.md" "README.md"
           # Вставка содержимого файла с коллабораторами в README.md
-          collabs_start_ind=$(grep -F -n "<a id=repo_collaborators></a>" README.md | cut -d ":" -f 1)
+          collabs_start_ind=$(grep -F -n "<a id=repo_collaborators pos=begin></a>" README.md | cut -d ":" -f 1)
           if [ ${#collaborators[@]} -eq 0 ]; then
               echo "Коллабораторов на данный момент нет" > collaborators.txt
           fi
@@ -95,7 +95,7 @@ jobs:
             echo -e "|  $name_val  |  $icon  |" >> config_table.txt
           done
           # Вставка содержимого файла с таблицой настроек Телеграмм-уведомлений в README.md
-          config_table_start_ind=$(grep -F -n "<a id=repo_config></a>" README.md | cut -d ":" -f 1)
+          config_table_start_ind=$(grep -F -n "<a id=repo_config pos=begin></a>" README.md | cut -d ":" -f 1)
           sed -i "$(expr $config_table_start_ind + 0)r config_table.txt" README.md
           rm config_table.txt
           

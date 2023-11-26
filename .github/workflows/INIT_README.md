@@ -3,11 +3,13 @@
 
 ### Коллабораторы репозитория
 
-<a id=repo_collaborators></a>
+<a id=repo_collaborators pos=begin></a>
+<a id=repo_collaborators pos=end></a>
 
 ### Текущая конфигурация Telegram-уведомлений
 
-<a id=repo_config></a>
+<a id=repo_config pos=begin></a>
+<a id=repo_config pos=end></a>
 
 ----
 

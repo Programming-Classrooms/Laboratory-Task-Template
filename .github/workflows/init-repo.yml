@@ -65,7 +65,7 @@ jobs:
           collaborators_num=0
 
           for ((index=0; index<${#collaborators[@]}; index++)); do
-              collaborator="${collaborators[index]}"
+              collaborator="${collaborators[$index]}"
               echo "collaborator = $collaborator"
               GITHUB_LOGIN="$collaborator"
               TELEGRAM_LOGIN="$(jq -r ".$collaborator" $LOGINS_FILE_PATH)"

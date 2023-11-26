@@ -103,7 +103,7 @@ Host github.com-PetrIvanov
 
 ```sh
 ssh -T git@github.com-IvanPetrov
-# Hi AlexandrOsiptsov! You've successfully authenticated, but GitHub does not provide shell access.
+# Hi IvanPetrov! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
 ## Создание локальной копии репозитория (через SSH)

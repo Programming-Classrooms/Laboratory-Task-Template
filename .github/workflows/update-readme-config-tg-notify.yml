@@ -23,7 +23,7 @@ jobs:
         id: checking-template-repository
         run: |
           repository=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}")
-          is_template=$(echo "$repository" | jq -r ".template_repository")
+          is_template=$(echo "$repository" | jq -r ".is_template")
           echo "REPO_IS_TEMPLATE=$is_template" >> $GITHUB_OUTPUT
           
         # Checkout репозитория

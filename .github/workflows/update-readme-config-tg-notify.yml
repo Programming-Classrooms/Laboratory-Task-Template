@@ -32,10 +32,8 @@ jobs:
           # Определение индексов строк, в которых записана таблица
           config_table_begin_ind=$(grep -F -n "<a id=repo_config pos=begin></a>" README.md | cut -d ":" -f 1)
           config_table_end_ind=$(grep -F -n "<a id=repo_config pos=end></a>" README.md | cut -d ":" -f 1)
-          config_table_begin_ind=$((config_table_begin_ind + 1))
-          config_table_end_ind=$((config_table_end_ind - 1))
           # Удаление таблицы
-          sed -i "${config_table_begin_ind},${config_table_end_ind}d" "README.md"
+          sed -i "$((config_table_begin_ind + 1)),$((config_table_end_ind - 1))d" "README.md"
           # Вставка содержимого файла с таблицой настроек Телеграмм-уведомлений в README.md
           sed -i "$(expr $config_table_begin_ind + 0)r config_table.txt" README.md
           rm config_table.txt

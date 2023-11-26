@@ -60,7 +60,7 @@ jobs:
           touch collaborators.txt
           echo "|     №     |                   GitHub-логин                    |    Telegram-логин    |" >> collaborators.txt
           echo "|:---------:|:-------------------------------------------------:|:--------------------:|" >>collaborators.txt
-          collaborators=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+          collaborators=($(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login'))
           LOGINS_FILE_PATH=".github/workflows/config-gh-tg-logins.json"
           collaborators_num=0
 

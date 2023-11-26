@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - '.github/workflows/config-tg-notify.json'
+    branches-ignore:
+      - main
 
 jobs:
   update-readme:
@@ -15,6 +17,8 @@ jobs:
 
       - name: README.md updating
         run: |
+          git pull
+          
           # Создание текстового файла с таблицой настроек Телеграмм-уведомлений
           touch config_table.txt
           echo "|                 Тип уведомления                 |                      |" >> config_table.txt
@@ -42,7 +46,4 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Обновлен раздел настроек Телеграмм-уведомлений в README.md"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git push origin ${{ github.ref }}

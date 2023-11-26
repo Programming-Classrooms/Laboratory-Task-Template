@@ -12,18 +12,12 @@ jobs:
       - name: Repository checkout
         uses: actions/checkout@v2
         
-      - name: Checking template repository
+      - name: Check repository template
         id: checking-template-repository
         run: |
-          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          REPO_NAME=${REPO_NAME#*/}
-          if [[ "${REPO_NAME}" == *"template"* ]]; then
-            echo "Repository is template"
-            echo "REPO_IS_TEMPLATE=true" >> $GITHUB_OUTPUT
-          else
-            echo "Repository is NOT template"
-            echo "REPO_IS_TEMPLATE=false" >> $GITHUB_OUTPUT
-          fi
+          repository=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}")
+          is_template=$(echo "$repository" | jq -r ".is_template")
+          echo "REPO_IS_TEMPLATE=$is_template" >> $GITHUB_OUTPUT
           
       - name: Checking initialization
         id: checking-initialization

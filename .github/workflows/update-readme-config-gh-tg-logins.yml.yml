@@ -1,4 +1,4 @@
-name: Updating README.md after Telegram-notify config change
+name: Updating README.md after GH-TG logins change
 on:
   push:
     paths:

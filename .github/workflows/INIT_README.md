@@ -90,13 +90,13 @@ nano ~/.ssh/config
 Host github.com-IvanPetrov
   HostName github.com
   User git
-  IdentityFile ~/.ssh/<название файла с ключом>
+  IdentityFile ~/.ssh/<название файла с ПРИВАТНЫМ ключом (БЕЗ расширения .pub)>
 
 # Account 2
 Host github.com-PetrIvanov
   HostName github.com
   User git
-  IdentityFile ~/.ssh/<название файла с ключом>
+  IdentityFile ~/.ssh/<название файла с ПРИВАТНЫМ ключом (БЕЗ расширения .pub)>
 ```
 
 Для самопроверки можно прописать:
